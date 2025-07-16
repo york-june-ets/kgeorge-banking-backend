@@ -8,10 +8,33 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false, unique = true)
     private String email;
     private String phoneNumber;
+
+    public Customer() {}
+    public Customer(String firstName, String lastName, String email, String phoneNumber) {
+        if (firstName == null || firstName.isBlank()) {throw new IllegalArgumentException("First name is required");}
+        if (lastName == null || lastName.isBlank()) {throw new IllegalArgumentException("Last name is required");}
+        if (email == null || email.isBlank()) {throw new IllegalArgumentException("Email is required");}
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+    public void updateCustomerData(String firstName, String lastName, String email, String phoneNumber) {
+        if (firstName == null || firstName.isBlank()) {throw new IllegalArgumentException("First name is required");}
+        if (lastName == null || lastName.isBlank()) {throw new IllegalArgumentException("Last name is required");}
+        if (email == null || email.isBlank()) {throw new IllegalArgumentException("Email is required");}
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,8 @@
 package solutions.york.bankingbackend.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import solutions.york.bankingbackend.dto.CustomerRequest;
 import solutions.york.bankingbackend.models.Customer;
 import solutions.york.bankingbackend.services.CustomerService;
 
@@ -15,28 +17,32 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.save(customer);
+    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerRequest request) {
+        Customer createdCustomer = customerService.create(request);
+        return ResponseEntity.ok(createdCustomer);
     }
 
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
-        customer.setId(id);
-        return customerService.save(customer);
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody CustomerRequest request) {
+        Customer updatedCustomer = customerService.update(id, request);
+        return ResponseEntity.ok(updatedCustomer);
     }
 
     @GetMapping
-    public List<Customer> getAll() {
-        return customerService.findAll();
+    public ResponseEntity<List<Customer>> getAll() {
+        List<Customer> customers = customerService.findAll();
+        return ResponseEntity.ok(customers);
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Long id) {
-        return customerService.findById(id);
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        Customer customer = customerService.findById(id);
+        return ResponseEntity.ok(customer);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomerById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCustomerById(@PathVariable Long id) {
         customerService.deleteById(id);
+        return ResponseEntity.ok("Customer deleted successfully"); // may change later
     }
 }
