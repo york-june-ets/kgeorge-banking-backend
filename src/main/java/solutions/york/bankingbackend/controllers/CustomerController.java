@@ -3,6 +3,7 @@ package solutions.york.bankingbackend.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import solutions.york.bankingbackend.dto.CustomerRequest;
+import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
 import solutions.york.bankingbackend.services.CustomerService;
 
@@ -40,9 +41,15 @@ public class CustomerController {
         return ResponseEntity.ok(customer);
     }
 
+    @GetMapping("/{id}/accounts")
+    public ResponseEntity<List<Account>> getAccountsForCustomer(@PathVariable Long id) {
+        List<Account> accounts = customerService.findAccounts(id);
+        return ResponseEntity.ok(accounts);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomerById(@PathVariable Long id) {
         customerService.deleteById(id);
-        return ResponseEntity.ok("Customer deleted successfully"); // may change later
+        return ResponseEntity.ok("Customer deleted successfully");
     }
 }

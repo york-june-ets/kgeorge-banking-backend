@@ -2,7 +2,9 @@ package solutions.york.bankingbackend.services;
 
 import org.springframework.stereotype.Service;
 import solutions.york.bankingbackend.dto.CustomerRequest;
+import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
+import solutions.york.bankingbackend.repositories.AccountRepository;
 import solutions.york.bankingbackend.repositories.CustomerRepository;
 
 import java.util.List;
@@ -11,9 +13,11 @@ import java.util.Optional;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final AccountRepository accountRepository;
 
-    CustomerService(CustomerRepository customerRepository) {
+    CustomerService(CustomerRepository customerRepository, AccountRepository accountRepository) {
         this.customerRepository = customerRepository;
+        this.accountRepository = accountRepository;
     }
 
     public Customer create(CustomerRequest request) {
@@ -56,5 +60,11 @@ public class CustomerService {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
         customerRepository.deleteById(id);
+    }
+
+    public List<Account> findAccounts(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
+        return accountRepository.findByCustomerId(customer.get().getId());
     }
 }
