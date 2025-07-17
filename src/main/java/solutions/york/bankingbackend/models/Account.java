@@ -19,7 +19,7 @@ public class Account {
     @SequenceGenerator(name = "account_number_gen", sequenceName = "account_number_seq", initialValue = 1000000000, allocationSize = 1)
 
     @Column(nullable = false, unique = true)
-    private String accountNumber;
+    private Long accountNumber;
 
     @Column(nullable = false)
     private String accountStatus;
@@ -57,10 +57,10 @@ public class Account {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
-    public String getAccountNumber() {
+    public Long getAccountNumber() {
         return accountNumber;
     }
-    public void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(Long accountNumber) {
         this.accountNumber = accountNumber;
     }
     public String getAccountStatus() {

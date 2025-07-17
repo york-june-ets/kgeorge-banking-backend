@@ -31,13 +31,13 @@ public class AccountService {
         return accountRepository.save(newAccount);
     }
 
-    public Account findByAccountNumber(String accountNumber) {
+    public Account findByAccountNumber(Long accountNumber) {
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
         if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
         return account.get();
     }
 
-    public void updateAccountStatus(String accountNumber, String accountStatus) {
+    public void updateAccountStatus(Long accountNumber, String accountStatus) {
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
         if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
 
@@ -45,7 +45,7 @@ public class AccountService {
         account.get().setAccountStatus(accountStatus);
     }
 
-    public void closeAccount(String accountNumber) {
+    public void closeAccount(Long accountNumber) {
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
         if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
 
