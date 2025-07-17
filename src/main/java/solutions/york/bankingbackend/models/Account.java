@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 @Table
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_gen")
-    @SequenceGenerator(name = "account_gen", sequenceName = "account_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private Customer customer;
