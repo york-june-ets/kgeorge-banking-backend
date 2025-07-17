@@ -9,12 +9,16 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_gen")
     @SequenceGenerator(name = "customer_gen", sequenceName = "customer_seq")
     private Long id;
+
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
+
     @Column(nullable = false, unique = true)
     private String email;
+
     private String phoneNumber;
 
     public Customer() {}
