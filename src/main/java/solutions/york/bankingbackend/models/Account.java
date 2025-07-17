@@ -66,4 +66,13 @@ public class Account {
     public String getAccountStatus() {
         return accountStatus;
     }
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+    public double getBalance() {
+        return balance;
+    }
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }
