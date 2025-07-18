@@ -7,8 +7,8 @@ public class Transfer extends Transaction {
     private Long recipientAccountNumber;
 
     public Transfer() {}
-    public Transfer(Long accountNumber, Long recipientAccountNumber, double amount) {
-        super(Type.TRANSFER, accountNumber, amount);
+    public Transfer(Account account, Long recipientAccountNumber, double amount) {
+        super(Type.TRANSFER, account, amount);
         this.recipientAccountNumber = recipientAccountNumber;
     }
     public Long getRecipientAccountNumber() {
