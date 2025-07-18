@@ -22,13 +22,20 @@ public class AccountService {
     public Account create(CreateAccountRequest request) {
         if (request == null) { throw new IllegalArgumentException("Request body is required");}
         if (request.getCustomerId() == null) {throw new IllegalArgumentException("Customer id is required");}
-        if (!(request.getAccountType().equals("CHECKING") || request.getAccountType().equals("SAVINGS")));
-        if (!(request.getAccountStatus().equals("ACTIVE") || request.getAccountStatus().equals("CLOSED") || request.getAccountStatus().equals("SUSPENDED"))) {throw new IllegalArgumentException("Account status is required: ACTIVE, CLOSED, or SUSPENDED");}
+        if (request.getAccountType() == null) {throw new IllegalArgumentException("Account type is required");}
+        if (request.getAccountStatus() == null) {throw new IllegalArgumentException("Account status is required");}
 
-        Optional<Customer> customer = customerRepository.findById(request.getCustomerId());
-        if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
-        Account newAccount = new Account(customer.get(), request.getAccountType(), request.getAccountStatus());
-        return accountRepository.save(newAccount);
+        try {
+            Account.Type type = Account.Type.valueOf(request.getAccountType());
+            Account.Status status = Account.Status.valueOf(request.getAccountStatus());
+
+            Optional<Customer> customer = customerRepository.findById(request.getCustomerId());
+            if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
+            Account newAccount = new Account(customer.get(), type, status);
+            return accountRepository.save(newAccount);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Account type or status is invalid");
+        }
     }
 
     public Account findByAccountNumber(Long accountNumber) {
@@ -40,9 +47,13 @@ public class AccountService {
     public void updateAccountStatus(Long accountNumber, String accountStatus) {
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
         if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
-
-        if (!(accountStatus.equals("ACTIVE") || accountStatus.equals("SUSPENDED"))) {throw new IllegalArgumentException("Account status is required: ACTIVE or SUSPENDED");}
-        account.get().setAccountStatus(accountStatus);
+        if (accountStatus == null || accountStatus.isBlank()) {throw new IllegalArgumentException("Account status is required");}
+        try {
+            Account.Status status = Account.Status.valueOf(accountStatus);
+            account.get().setAccountStatus(status);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Account status is invalid");
+        }
     }
 
     public void closeAccount(Long accountNumber) {
@@ -50,6 +61,6 @@ public class AccountService {
         if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
 
         if (account.get().getBalance() != 0.00) {throw new IllegalArgumentException("Account balance must be zero");}
-        account.get().setAccountStatus("CLOSED");
+        account.get().setAccountStatus(Account.Status.CLOSED);
     }
 }

@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 @Entity
 @Table
 public class Account {
+    public enum Status {ACTIVE, SUSPENDED, CLOSED}
+    public enum Type {CHECKING, SAVINGS}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,7 +16,7 @@ public class Account {
     private Customer customer;
 
     @Column(nullable = false)
-    private String accountType;
+    private Type accountType;
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_number_gen")
     @SequenceGenerator(name = "account_number_gen", sequenceName = "account_number_seq", initialValue = 1000000000, allocationSize = 1)
@@ -22,16 +25,16 @@ public class Account {
     private Long accountNumber;
 
     @Column(nullable = false)
-    private String accountStatus;
+    private Status accountStatus;
 
     @Column(nullable = false)
     private double balance;
 
     public Account() {}
-    public Account(Customer customer, String accountType, String accountStatus) {
+    public Account(Customer customer, Type accountType, Status accountStatus) {
         if (customer == null || customer.getId() ==  null) {throw new IllegalArgumentException("Customer is required");}
-        if (!(accountType.equals("CHECKING") || accountType.equals("SAVINGS"))) {throw new IllegalArgumentException("Account type is required: CHECKING or SAVINGS");}
-        if (!(accountStatus.equals("ACTIVE") || accountStatus.equals("CLOSED") || accountStatus.equals("SUSPENDED"))) {throw new IllegalArgumentException("Account status is required: ACTIVE, CLOSED, or SUSPENDED");}
+        if (accountType == null) {throw new IllegalArgumentException("Account type is required: CHECKING or SAVINGS");}
+        if (accountStatus == null) {throw new IllegalArgumentException("Account status is required: ACTIVE, CLOSED, or SUSPENDED");}
 
         this.customer = customer;
         this.accountType = accountType;
@@ -51,10 +54,10 @@ public class Account {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    public String getAccountType() {
+    public Type getAccountType() {
         return accountType;
     }
-    public void setAccountType(String accountType) {
+    public void setAccountType(Type accountType) {
         this.accountType = accountType;
     }
     public Long getAccountNumber() {
@@ -63,10 +66,10 @@ public class Account {
     public void setAccountNumber(Long accountNumber) {
         this.accountNumber = accountNumber;
     }
-    public String getAccountStatus() {
+    public Status getAccountStatus() {
         return accountStatus;
     }
-    public void setAccountStatus(String accountStatus) {
+    public void setAccountStatus(Status accountStatus) {
         this.accountStatus = accountStatus;
     }
     public double getBalance() {
