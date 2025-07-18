@@ -13,19 +13,29 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long accountNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "accountNumber", referencedColumnName = "accountNumber",  nullable = false)
+    private Account account;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     protected Type transactionType;
+
+    @Column(nullable = false)
     private double amount;
+
+    @Column(nullable = false)
     private LocalDateTime timestamp;
 
     public Transaction() {}
-    public Transaction(Type transactionType, Long accountNumber, double amount) {
-        if (accountNumber == null) {throw new IllegalArgumentException("Account number is required");}
+    public Transaction(Type transactionType, Account account, double amount) {
+        if (account == null) {throw new IllegalArgumentException("Account is required");}
         if (transactionType == null) {throw new IllegalArgumentException("Transaction type is required");}
         if (amount <= 0) {throw new IllegalArgumentException("Amount must be greater than or equal to zero");}
         // Ensuring all transactions of type transfer are made through Transfer class with recipientAccountNumber prop
         if (transactionType == Type.TRANSFER && this.getClass() == Transaction.class) {throw new IllegalArgumentException("Transactions of type TRANSFER must be created with Transfer class");}
-        this.accountNumber = accountNumber;
+        this.account = account;
         this.transactionType = transactionType;
         this.amount = amount;
         this.timestamp = LocalDateTime.now();
@@ -37,11 +47,11 @@ public class Transaction {
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getAccountNumber() {
-        return accountNumber;
+    public Account getAccount() {
+        return account;
     }
-    public void setAccountNumber(Long accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setAccount(Account account) {
+        this.account = account;
     }
     public Type getTransactionType() {
         return transactionType;

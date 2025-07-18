@@ -15,15 +15,16 @@ public class Account {
     @ManyToOne
     private Customer customer;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type accountType;
 
+    @Column(nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_number_gen")
     @SequenceGenerator(name = "account_number_gen", sequenceName = "account_number_seq", initialValue = 1000000000, allocationSize = 1)
-
-    @Column(nullable = false, unique = true)
     private Long accountNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status accountStatus;
 
