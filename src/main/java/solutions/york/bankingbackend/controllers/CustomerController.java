@@ -48,8 +48,8 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCustomerById(@PathVariable Long id) {
-        customerService.deleteById(id);
-        return ResponseEntity.ok("Customer deleted successfully");
+    public ResponseEntity<String> archiveCustomer(@PathVariable Long id) {
+        customerService.archive(id);
+        return ResponseEntity.ok("Customer account closed successfully");
     }
 }

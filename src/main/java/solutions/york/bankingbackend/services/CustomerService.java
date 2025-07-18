@@ -41,6 +41,7 @@ public class CustomerService {
         if (request.getEmail() == null || request.getEmail().isBlank()) {throw new IllegalArgumentException("Email is required");}
 
         Customer existingCustomer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+        if (existingCustomer.isArchived()) {throw new IllegalArgumentException("Cannot update archived customer");}
 
         existingCustomer.updateCustomerData(request.getFirstName(), request.getLastName(), request.getEmail(), request.getPhoneNumber());
         return customerRepository.save(existingCustomer);
@@ -56,10 +57,10 @@ public class CustomerService {
         return customer.get();
     }
 
-    public void deleteById(Long id) {
+    public void archive(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
-        customerRepository.deleteById(id);
+        customer.get().setArchived(true);
     }
 
     public List<Account> findAccounts(Long id) {

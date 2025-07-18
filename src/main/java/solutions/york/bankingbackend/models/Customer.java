@@ -21,6 +21,8 @@ public class Customer {
 
     private String phoneNumber;
 
+    private Boolean archived;
+
     public Customer() {}
     public Customer(String firstName, String lastName, String email, String phoneNumber) {
         if (firstName == null || firstName.isBlank()) {throw new IllegalArgumentException("First name is required");}
@@ -30,6 +32,7 @@ public class Customer {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.archived = false;
     }
     public void updateCustomerData(String firstName, String lastName, String email, String phoneNumber) {
         if (firstName == null || firstName.isBlank()) {throw new IllegalArgumentException("First name is required");}
@@ -70,5 +73,11 @@ public class Customer {
     }
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    public Boolean isArchived() {
+        return archived;
+    }
+    public void setArchived(Boolean archived) {
+        this.archived = archived;
     }
 }
