@@ -4,19 +4,24 @@ import org.springframework.stereotype.Service;
 import solutions.york.bankingbackend.dto.CreateAccountRequest;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
+import solutions.york.bankingbackend.models.Transaction;
 import solutions.york.bankingbackend.repositories.AccountRepository;
 import solutions.york.bankingbackend.repositories.CustomerRepository;
+import solutions.york.bankingbackend.repositories.TransactionRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final TransactionRepository transactionRepository;
 
-    public AccountService(AccountRepository accountRepository, CustomerRepository customerRepository) {
+    public AccountService(AccountRepository accountRepository, CustomerRepository customerRepository, TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public Account create(CreateAccountRequest request) {
@@ -62,5 +67,11 @@ public class AccountService {
 
         if (account.get().getBalance() != 0.00) {throw new IllegalArgumentException("Account balance must be zero");}
         account.get().setAccountStatus(Account.Status.CLOSED);
+    }
+
+    public List<Transaction> findTransactionsByAccountNumber(Long accountNumber) {
+        Optional<Account> account = accountRepository.findById(accountNumber);
+        if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
+        return transactionRepository.findTransactionsByAccountNumber(account.get().getAccountNumber());
     }
 }

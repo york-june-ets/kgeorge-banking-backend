@@ -4,7 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import solutions.york.bankingbackend.dto.CreateAccountRequest;
 import solutions.york.bankingbackend.models.Account;
+import solutions.york.bankingbackend.models.Transaction;
 import solutions.york.bankingbackend.services.AccountService;
+import solutions.york.bankingbackend.services.TransactionService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -38,6 +42,9 @@ public class AccountController {
         return ResponseEntity.ok(account);
     }
 
-
-
+    @GetMapping("/{accountNumber}/transactions")
+    public ResponseEntity<List<Transaction>> getTransactionsByAccountNumber(@PathVariable Long accountNumber) {
+        List<Transaction> transactions = accountService.findTransactionsByAccountNumber(accountNumber);
+        return ResponseEntity.ok(transactions);
+    }
 }
