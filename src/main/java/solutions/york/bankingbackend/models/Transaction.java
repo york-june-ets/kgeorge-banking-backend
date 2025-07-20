@@ -33,8 +33,12 @@ public class Transaction {
         if (account == null) {throw new IllegalArgumentException("Account is required");}
         if (transactionType == null) {throw new IllegalArgumentException("Transaction type is required");}
         if (amount <= 0) {throw new IllegalArgumentException("Amount must be greater than or equal to zero");}
+
         // Ensuring all transactions of type transfer are made through Transfer class with recipientAccountNumber prop
         if (transactionType == Type.TRANSFER && this.getClass() == Transaction.class) {throw new IllegalArgumentException("Transactions of type TRANSFER must be created with Transfer class");}
+        // ensuring transactions are only made for active accounts
+        if (account.getAccountStatus() != Account.Status.ACTIVE) {throw new IllegalArgumentException("Transactions can only be made for active accounts");}
+
         this.account = account;
         this.transactionType = transactionType;
         this.amount = amount;

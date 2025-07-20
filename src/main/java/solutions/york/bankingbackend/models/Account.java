@@ -9,8 +9,9 @@ public class Account {
     public enum Type {CHECKING, SAVINGS}
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "account_gen")
+    @SequenceGenerator(name = "account_gen", sequenceName = "account_seq", initialValue = 1000000000, allocationSize = 1)
+    private Long accountNumber;
 
     @ManyToOne
     private Customer customer;
@@ -18,11 +19,6 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type accountType;
-
-    @Column(nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_number_gen")
-    @SequenceGenerator(name = "account_number_gen", sequenceName = "account_number_seq", initialValue = 1000000000, allocationSize = 1)
-    private Long accountNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -36,18 +32,18 @@ public class Account {
         if (customer == null || customer.getId() ==  null) {throw new IllegalArgumentException("Customer is required");}
         if (accountType == null) {throw new IllegalArgumentException("Account type is required: CHECKING or SAVINGS");}
         if (accountStatus == null) {throw new IllegalArgumentException("Account status is required: ACTIVE, CLOSED, or SUSPENDED");}
-
+        if (customer.isArchived()) {throw new IllegalArgumentException("Customer is archived");}
+        
         this.customer = customer;
         this.accountType = accountType;
         this.accountStatus = accountStatus;
         this.balance = 0.00;
     }
-
-    public Long getId() {
-        return id;
+    public Long getAccountNumber() {
+        return accountNumber;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setAccountNumber(Long accountNumber) {
+        this.accountNumber = accountNumber;
     }
     public Customer getCustomer() {
         return customer;
@@ -60,12 +56,6 @@ public class Account {
     }
     public void setAccountType(Type accountType) {
         this.accountType = accountType;
-    }
-    public Long getAccountNumber() {
-        return accountNumber;
-    }
-    public void setAccountNumber(Long accountNumber) {
-        this.accountNumber = accountNumber;
     }
     public Status getAccountStatus() {
         return accountStatus;

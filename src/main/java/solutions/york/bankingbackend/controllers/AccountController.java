@@ -6,6 +6,7 @@ import solutions.york.bankingbackend.dto.AccountRequest;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Transaction;
 import solutions.york.bankingbackend.services.AccountService;
+import solutions.york.bankingbackend.services.TransactionService;
 
 import java.util.List;
 
@@ -13,8 +14,10 @@ import java.util.List;
 @RequestMapping("/api/accounts")
 public class AccountController {
     private final AccountService accountService;
-    public AccountController(AccountService accountService) {
+    private final TransactionService transactionService;
+    public AccountController(AccountService accountService, TransactionService transactionService) {
         this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     @PostMapping
@@ -43,7 +46,8 @@ public class AccountController {
 
     @GetMapping("/{accountNumber}/transactions")
     public ResponseEntity<List<Transaction>> getTransactionsByAccountNumber(@PathVariable Long accountNumber) {
-        List<Transaction> transactions = accountService.findTransactionsByAccountNumber(accountNumber);
+        List<Transaction> transactions =  transactionService.findTransactionsByAccountNumber(accountNumber);
         return ResponseEntity.ok(transactions);
     }
+
 }
