@@ -27,7 +27,8 @@ public class TransferService {
         Account recipientAccount = accountService.findByAccountNumber(request.getRecipientAccountNumber());
 
         try {
-            Transaction.Type type = Transaction.Type.valueOf(request.getTransactionType());
+            account.setBalance(account.getBalance() - request.getAmount());
+            recipientAccount.setBalance(recipientAccount.getBalance() + request.getAmount());
 
             Transfer transfer = new Transfer(account, recipientAccount, request.getAmount());
             return transferRepository.save(transfer);
