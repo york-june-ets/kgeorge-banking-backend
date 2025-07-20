@@ -49,6 +49,12 @@ public class AccountService {
         return account.get();
     }
 
+    public List<Account> findByCustomerId(Long customerId) {
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
+        return accountRepository.findByCustomerId(customerId);
+    }
+
     public void updateAccountStatus(Long accountNumber, String accountStatus) {
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
         if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}

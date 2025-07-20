@@ -4,17 +4,18 @@ import jakarta.persistence.*;
 
 @Entity
 public class Transfer extends Transaction {
-    private Long recipientAccountNumber;
+    @ManyToOne
+    private Account recipientAccount;
 
     public Transfer() {}
-    public Transfer(Account account, Long recipientAccountNumber, double amount) {
+    public Transfer(Account account, Account recipientAccount, double amount) {
         super(Type.TRANSFER, account, amount);
-        this.recipientAccountNumber = recipientAccountNumber;
+        this.recipientAccount = recipientAccount;
     }
-    public Long getRecipientAccountNumber() {
-        return recipientAccountNumber;
+    public Account getRecipientAccount() {
+        return recipientAccount;
     }
-    public void setRecipientAccountNumber(Long recipientAccountNumber) {
-        this.recipientAccountNumber = recipientAccountNumber;
+    public void setRecipientAccount(Account recipientAccount) {
+        this.recipientAccount = recipientAccount;
     }
 }

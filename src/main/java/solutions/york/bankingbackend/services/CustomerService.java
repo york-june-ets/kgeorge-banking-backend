@@ -13,11 +13,11 @@ import java.util.Optional;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
-    CustomerService(CustomerRepository customerRepository, AccountRepository accountRepository) {
+    CustomerService(CustomerRepository customerRepository, AccountService accountService) {
         this.customerRepository = customerRepository;
-        this.accountRepository = accountRepository;
+        this.accountService = accountService;
     }
 
     public Customer create(CustomerRequest request) {
@@ -66,6 +66,6 @@ public class CustomerService {
     public List<Account> findAccounts(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
-        return accountRepository.findByCustomerId(customer.get().getId());
+        return accountService.findByCustomerId(customer.get().getId());
     }
 }

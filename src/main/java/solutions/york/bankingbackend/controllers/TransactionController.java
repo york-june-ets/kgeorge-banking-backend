@@ -16,7 +16,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> createTransaction(TransactionRequest request) {
+    public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionRequest request) {
         Transaction transaction = transactionService.create(request);
         return ResponseEntity.ok(transaction);
     }

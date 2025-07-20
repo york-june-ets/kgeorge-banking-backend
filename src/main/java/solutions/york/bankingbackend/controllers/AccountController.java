@@ -18,13 +18,13 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<Account> createAccount(AccountRequest request) {
+    public ResponseEntity<Account> createAccount(@RequestBody AccountRequest request) {
         Account createdAccount = accountService.create(request);
         return ResponseEntity.ok(createdAccount);
     }
 
     @PutMapping("/{accountNumber}")
-    public ResponseEntity<String> updateAccountStatus(@PathVariable Long accountNumber, String accountStatus) {
+    public ResponseEntity<String> updateAccountStatus(@PathVariable Long accountNumber, @RequestBody String accountStatus) {
         accountService.updateAccountStatus(accountNumber, accountStatus);
         return ResponseEntity.ok("Account status updated successfully");
     }
