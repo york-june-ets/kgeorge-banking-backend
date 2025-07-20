@@ -1,7 +1,7 @@
 package solutions.york.bankingbackend.services;
 
 import org.springframework.stereotype.Service;
-import solutions.york.bankingbackend.dto.CreateAccountRequest;
+import solutions.york.bankingbackend.dto.AccountRequest;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
 import solutions.york.bankingbackend.models.Transaction;
@@ -24,7 +24,7 @@ public class AccountService {
         this.transactionRepository = transactionRepository;
     }
 
-    public Account create(CreateAccountRequest request) {
+    public Account create(AccountRequest request) {
         if (request == null) { throw new IllegalArgumentException("Request body is required");}
         if (request.getCustomerId() == null) {throw new IllegalArgumentException("Customer id is required");}
         if (request.getAccountType() == null) {throw new IllegalArgumentException("Account type is required");}

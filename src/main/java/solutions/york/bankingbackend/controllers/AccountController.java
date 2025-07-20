@@ -2,11 +2,10 @@ package solutions.york.bankingbackend.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import solutions.york.bankingbackend.dto.CreateAccountRequest;
+import solutions.york.bankingbackend.dto.AccountRequest;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Transaction;
 import solutions.york.bankingbackend.services.AccountService;
-import solutions.york.bankingbackend.services.TransactionService;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<Account> createAccount(CreateAccountRequest request) {
+    public ResponseEntity<Account> createAccount(AccountRequest request) {
         Account createdAccount = accountService.create(request);
         return ResponseEntity.ok(createdAccount);
     }

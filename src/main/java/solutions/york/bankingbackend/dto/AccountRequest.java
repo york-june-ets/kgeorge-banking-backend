@@ -1,6 +1,6 @@
 package solutions.york.bankingbackend.dto;
 
-public class CreateAccountRequest {
+public class AccountRequest {
     private Long customerId;
     private String accountType;
     private String accountStatus;
