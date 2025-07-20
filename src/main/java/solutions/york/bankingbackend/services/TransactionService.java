@@ -32,6 +32,8 @@ public class TransactionService {
             Transaction.Type type = Transaction.Type.valueOf(request.getTransactionType());
             if (type == Transaction.Type.TRANSFER) {throw new IllegalArgumentException("Transfers must be created using api/transfers endpoint");}
             Transaction transaction = new Transaction(type, account, request.getAmount());
+            if (type == Transaction.Type.DEPOSIT) {account.setBalance(account.getBalance() + request.getAmount());}
+            if (type == Transaction.Type.WITHDRAWAL) {account.setBalance(account.getBalance() - request.getAmount());}
             return transactionRepository.save(transaction);
         } catch (Exception e) {
             throw new IllegalArgumentException("Transaction type is invalid");
