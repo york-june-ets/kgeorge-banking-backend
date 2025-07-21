@@ -70,7 +70,9 @@ public class AccountService {
         Account account = accountRepository.findById(accountNumber).orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
         if (account.getBalance() != 0.00) {throw new IllegalArgumentException("Account balance must be zero");}
-        account.setAccountStatus(Account.Status.CLOSED);
+        Account.Status closedStatus = Account.Status.CLOSED;
+
+        account.setAccountStatus(closedStatus);
         accountRepository.save(account);
     }
 
