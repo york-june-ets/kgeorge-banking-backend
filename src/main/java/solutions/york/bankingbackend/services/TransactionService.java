@@ -7,7 +7,6 @@ import solutions.york.bankingbackend.models.Transaction;
 import solutions.york.bankingbackend.repositories.TransactionRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TransactionService {

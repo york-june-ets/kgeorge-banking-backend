@@ -3,7 +3,6 @@ package solutions.york.bankingbackend.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

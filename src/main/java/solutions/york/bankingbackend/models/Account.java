@@ -3,7 +3,6 @@ package solutions.york.bankingbackend.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table
 public class Account {
     public enum Status {ACTIVE, SUSPENDED, CLOSED}
     public enum Type {CHECKING, SAVINGS}
@@ -33,7 +32,7 @@ public class Account {
         if (accountType == null) {throw new IllegalArgumentException("Account type is required: CHECKING or SAVINGS");}
         if (accountStatus == null) {throw new IllegalArgumentException("Account status is required: ACTIVE, CLOSED, or SUSPENDED");}
         if (customer.isArchived()) {throw new IllegalArgumentException("Customer is archived");}
-        
+
         this.customer = customer;
         this.accountType = accountType;
         this.accountStatus = accountStatus;

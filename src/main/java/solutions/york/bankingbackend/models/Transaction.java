@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Transaction {
     public enum Type {DEPOSIT, WITHDRAWAL, TRANSFER}
