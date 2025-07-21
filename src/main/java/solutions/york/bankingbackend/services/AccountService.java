@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import solutions.york.bankingbackend.dto.AccountRequest;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
-import solutions.york.bankingbackend.models.Transaction;
 import solutions.york.bankingbackend.repositories.AccountRepository;
 import solutions.york.bankingbackend.repositories.CustomerRepository;
 import solutions.york.bankingbackend.repositories.TransactionRepository;
@@ -55,23 +54,24 @@ public class AccountService {
     }
 
     public void updateAccountStatus(Long accountNumber, String accountStatus) {
-        Optional<Account> account = accountRepository.findById(accountNumber);
-        if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
+        Account account = accountRepository.findById(accountNumber).orElseThrow(() -> new IllegalArgumentException("Account not found"));
         if (accountStatus == null || accountStatus.isBlank()) {throw new IllegalArgumentException("Account status is required");}
         try {
             Account.Status status = Account.Status.valueOf(accountStatus);
-            account.get().setAccountStatus(status);
+            if (status == Account.Status.CLOSED) {throw new IllegalArgumentException("Accounts can only be closed by DELETE request");}
+            account.setAccountStatus(status);
+            accountRepository.save(account);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Account status is invalid");
         }
     }
 
     public void closeAccount(Long accountNumber) {
-        Optional<Account> account = accountRepository.findById(accountNumber);
-        if (account.isEmpty()) {throw new IllegalArgumentException("Account not found");}
+        Account account = accountRepository.findById(accountNumber).orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
-        if (account.get().getBalance() != 0.00) {throw new IllegalArgumentException("Account balance must be zero");}
-        account.get().setAccountStatus(Account.Status.CLOSED);
+        if (account.getBalance() != 0.00) {throw new IllegalArgumentException("Account balance must be zero");}
+        account.setAccountStatus(Account.Status.CLOSED);
+        accountRepository.save(account);
     }
 
 }

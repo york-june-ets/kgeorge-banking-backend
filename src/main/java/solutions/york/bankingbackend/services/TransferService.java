@@ -24,6 +24,8 @@ public class TransferService {
         if (request.getRecipientAccountNumber() == null) {throw new IllegalArgumentException("Recipient account number is required");}
 
         Account account = accountService.findByAccountNumber(request.getAccountNumber());
+        if (account.getAccountStatus() != Account.Status.ACTIVE) {throw new IllegalArgumentException("Account is not active");}
+
         Account recipientAccount = accountService.findByAccountNumber(request.getRecipientAccountNumber());
 
         try {
