@@ -6,6 +6,7 @@ import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Transaction;
 import solutions.york.bankingbackend.repositories.TransactionRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -46,5 +47,17 @@ public class TransactionService {
         Account account = accountService.findByAccountNumber(accountNumber);
         if (account == null) {throw new IllegalArgumentException("Account not found");}
         return transactionRepository.findByAccount_AccountNumber(account.getAccountNumber());
+    }
+
+    public List<Transaction> findTransactionsWithFilters(Long accountNumber, String transactionType, LocalDate fromDate, LocalDate toDate, Double minAmount, Double maxAmount) {
+        Transaction.Type type = null;
+        if (transactionType != null) {
+            try {
+                type = Transaction.Type.valueOf(transactionType);
+            } catch (IllegalArgumentException e) {
+                // treating invalid type as null/nonexistent
+            }
+        }
+        return transactionRepository.findTransactionWithFilters(accountNumber, type, fromDate, toDate, minAmount, maxAmount);
     }
 }
