@@ -43,24 +43,6 @@ public class TransactionService {
         }
     }
 
-//    public List<Transaction> filterTransactions(
-//            Long accountNumber,
-//            String type,
-//            java.time.LocalDate fromDate,
-//            java.time.LocalDate toDate,
-//            Double minAmount,
-//            Double maxAmount
-//    ) {
-//        try {
-//            Transaction.Type transactionType = Transaction.Type.valueOf(type);
-//            return transactionRepository.findWithFilters(
-//                    accountNumber, transactionType, fromDate, toDate, minAmount, maxAmount
-//            );
-//        } catch (Exception e) {
-//            throw new IllegalArgumentException("Invalid data type");
-//        }
-//    }
-
     public List<Transaction> findTransactionsByAccountNumber(Long accountNumber) {
         Account account = accountService.findByAccountNumber(accountNumber);
         if (account == null) {throw new IllegalArgumentException("Account not found");}

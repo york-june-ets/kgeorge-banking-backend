@@ -24,21 +24,4 @@ public class TransactionController {
         Transaction transaction = transactionService.create(request);
         return ResponseEntity.ok(transaction);
     }
-
-//    @GetMapping
-//    public ResponseEntity<List<Transaction>> filterTransactions(
-//            @RequestParam(required = false) Long accountNumber,
-//            @RequestParam(required = false) String type,
-//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
-//            @RequestParam(required = false) Double minAmount,
-//            @RequestParam(required = false) Double maxAmount
-//    ) {
-//        List<Transaction> transactions = transactionService.filterTransactions(
-//                accountNumber, type, fromDate, toDate, minAmount, maxAmount
-//        );
-//        return ResponseEntity.ok(transactions);
-//    }
-
-
 }
