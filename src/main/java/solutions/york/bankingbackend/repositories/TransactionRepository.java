@@ -14,8 +14,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT t FROM Transaction t WHERE " +
       "(:accountNumber IS NULL OR t.account.accountNumber = :accountNumber) AND " +
       "(:transactionType IS NULL OR t.transactionType = :transactionType) AND " +
-      "(:fromDate IS NULL OR t.timestamp >= :fromDate) AND " +
-      "(:toDate IS NULL OR t.timestamp <= :toDate) AND " +
+      "(:fromDate IS NULL OR CAST(t.timestamp AS date) >= :fromDate) AND " +
+      "(:toDate IS NULL OR CAST(t.timestamp AS date) <= :toDate) AND " +
       "(:minAmount IS NULL OR t.amount >= :minAmount) AND " +
       "(:maxAmount IS NULL OR t.amount <= :maxAmount)")
     List<Transaction> findTransactionWithFilters(
