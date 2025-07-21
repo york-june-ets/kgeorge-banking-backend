@@ -20,21 +20,21 @@ public class TransferService {
         if (request == null) {throw new IllegalArgumentException("Request body is required");}
         if (request.getAmount() <= 0.00) {throw new IllegalArgumentException("Amount must be greater than zero");}
         if (request.getAccountNumber() == null) {throw new IllegalArgumentException("Account number is required");}
-        if (request.getTransactionType() == null) {throw new IllegalArgumentException("Transaction type is required");}
         if (request.getRecipientAccountNumber() == null) {throw new IllegalArgumentException("Recipient account number is required");}
 
         Account account = accountService.findByAccountNumber(request.getAccountNumber());
         if (account.getAccountStatus() != Account.Status.ACTIVE) {throw new IllegalArgumentException("Account is not active");}
 
         Account recipientAccount = accountService.findByAccountNumber(request.getRecipientAccountNumber());
+        if (recipientAccount.getAccountStatus() != Account.Status.ACTIVE) {throw new IllegalArgumentException("Recipient Account is not active");}
+
+        double updatedBalance = account.getBalance() - request.getAmount();
+        double updatedRecipientBalance = recipientAccount.getBalance() + request.getAmount();
+        if (updatedBalance < 0.00) {throw new IllegalArgumentException("Account balance cannot be negative");}
+        account.setBalance(updatedBalance);
+        recipientAccount.setBalance(updatedRecipientBalance);
 
         try {
-            double updatedBalance = account.getBalance() - request.getAmount();
-            double updatedRecipientBalance = recipientAccount.getBalance() + request.getAmount();
-            if (updatedBalance < 0.00) {throw new IllegalArgumentException("Account balance cannot be negative");}
-            account.setBalance(updatedBalance);
-            recipientAccount.setBalance(updatedRecipientBalance);
-
             Transfer transfer = new Transfer(account, recipientAccount, request.getAmount());
             return transferRepository.save(transfer);
 

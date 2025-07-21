@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class Transfer extends Transaction {
     @ManyToOne
+    @JoinColumn(name = "recipientAccountNumber", referencedColumnName = "accountNumber",  nullable = true)
     private Account recipientAccount;
 
     public Transfer() {}
