@@ -29,8 +29,11 @@ public class TransferService {
         Account recipientAccount = accountService.findByAccountNumber(request.getRecipientAccountNumber());
 
         try {
-            account.setBalance(account.getBalance() - request.getAmount());
-            recipientAccount.setBalance(recipientAccount.getBalance() + request.getAmount());
+            double updatedBalance = account.getBalance() - request.getAmount();
+            double updatedRecipientBalance = recipientAccount.getBalance() + request.getAmount();
+            if (updatedBalance < 0.00) {throw new IllegalArgumentException("Account balance cannot be negative");}
+            account.setBalance(updatedBalance);
+            recipientAccount.setBalance(updatedRecipientBalance);
 
             Transfer transfer = new Transfer(account, recipientAccount, request.getAmount());
             return transferRepository.save(transfer);

@@ -32,8 +32,11 @@ public class TransactionService {
             Transaction.Type type = Transaction.Type.valueOf(request.getTransactionType());
             if (type == Transaction.Type.TRANSFER) {throw new IllegalArgumentException("Transfers must be created using api/transfers endpoint");}
             Transaction transaction = new Transaction(type, account, request.getAmount());
-            if (type == Transaction.Type.DEPOSIT) {account.setBalance(account.getBalance() + request.getAmount());}
-            if (type == Transaction.Type.WITHDRAWAL) {account.setBalance(account.getBalance() - request.getAmount());}
+            double updatedBalance = 0.00;
+            if (type == Transaction.Type.DEPOSIT) {updatedBalance = account.getBalance() + request.getAmount();}
+            if (type == Transaction.Type.WITHDRAWAL) {updatedBalance = account.getBalance() - request.getAmount();}
+            if (updatedBalance < 0.00) {throw new IllegalArgumentException("Account balance cannot be negative");}
+            account.setBalance(updatedBalance);
             return transactionRepository.save(transaction);
         } catch (Exception e) {
             throw new IllegalArgumentException("Transaction type is invalid");
