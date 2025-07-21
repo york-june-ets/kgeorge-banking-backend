@@ -2,6 +2,7 @@ package solutions.york.bankingbackend.services;
 
 import org.springframework.stereotype.Service;
 import solutions.york.bankingbackend.dto.CustomerRequest;
+import solutions.york.bankingbackend.dto.CustomerResponse;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
 import solutions.york.bankingbackend.repositories.AccountRepository;
@@ -20,52 +21,53 @@ public class CustomerService {
         this.accountService = accountService;
     }
 
-    public Customer create(CustomerRequest request) {
+    public CustomerResponse create(CustomerRequest request) {
         if (request == null) { throw new IllegalArgumentException("Request body is required");}
         if (request.getFirstName() == null || request.getFirstName().isBlank()) {throw new IllegalArgumentException("First name is required");}
         if (request.getLastName() == null || request.getLastName().isBlank()) {throw new IllegalArgumentException("Last name is required");}
         if (request.getEmail() == null || request.getEmail().isBlank()) {throw new IllegalArgumentException("Email is required");}
+        if (request.getPassword() == null || request.getPassword().isBlank()) {throw new IllegalArgumentException("Password is required");}
 
         boolean customerExists = customerRepository.findByEmail(request.getEmail()).isPresent();
 
         if (customerExists) {throw new IllegalArgumentException("A customer with that email already exists");} // is this the right exception? custom exception?
 
-        Customer newCustomer = new Customer(request.getFirstName(), request.getLastName(), request.getEmail(), request.getPhoneNumber());
-        return customerRepository.save(newCustomer);
+        Customer newCustomer = new Customer(request.getFirstName(), request.getLastName(), request.getEmail(), request.getPassword(), request.getPhoneNumber());
+        customerRepository.save(newCustomer);
+        return new CustomerResponse(newCustomer);
     }
 
-    public Customer update(Long id, CustomerRequest request) {
+    public CustomerResponse update(Long id, CustomerRequest request) {
         if (request == null) { throw new IllegalArgumentException("Request body is required");}
         if (request.getFirstName() == null || request.getFirstName().isBlank()) {throw new IllegalArgumentException("First name is required");}
         if (request.getLastName() == null || request.getLastName().isBlank()) {throw new IllegalArgumentException("Last name is required");}
         if (request.getEmail() == null || request.getEmail().isBlank()) {throw new IllegalArgumentException("Email is required");}
+        if (request.getPassword() == null || request.getPassword().isBlank()) {throw new IllegalArgumentException("Password is required");}
 
         Customer existingCustomer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
         if (existingCustomer.isArchived()) {throw new IllegalArgumentException("Cannot update archived customer");}
 
-        existingCustomer.updateCustomerData(request.getFirstName(), request.getLastName(), request.getEmail(), request.getPhoneNumber());
-        return customerRepository.save(existingCustomer);
+        existingCustomer.updateCustomerData(request.getFirstName(), request.getLastName(), request.getEmail(), request.getPassword(), request.getPhoneNumber());
+        customerRepository.save(existingCustomer);
+        return new CustomerResponse(existingCustomer);
     }
 
-    public List<Customer> findAll() {
-        return customerRepository.findAll();
+    public List<CustomerResponse> findAll() {
+        return customerRepository.findAll().stream().map(CustomerResponse::new).toList();
     }
 
-    public Customer findById(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
-        return customer.get();
+    public CustomerResponse findById(Long id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found")) ;
+        return new CustomerResponse(customer);
     }
 
     public void archive(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
-        customer.get().setArchived(true);
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+        customer.setArchived(true);
     }
 
     public List<Account> findAccounts(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
-        return accountService.findByCustomerId(customer.get().getId());
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+        return accountService.findByCustomerId(customer.getId());
     }
 }

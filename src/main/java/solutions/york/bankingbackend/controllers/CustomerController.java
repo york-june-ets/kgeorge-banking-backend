@@ -3,6 +3,7 @@ package solutions.york.bankingbackend.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import solutions.york.bankingbackend.dto.CustomerRequest;
+import solutions.york.bankingbackend.dto.CustomerResponse;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
 import solutions.york.bankingbackend.services.CustomerService;
@@ -18,26 +19,26 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerRequest request) {
-        Customer createdCustomer = customerService.create(request);
+    public ResponseEntity<CustomerResponse> createCustomer(@RequestBody CustomerRequest request) {
+        CustomerResponse createdCustomer = customerService.create(request);
         return ResponseEntity.ok(createdCustomer);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody CustomerRequest request) {
-        Customer updatedCustomer = customerService.update(id, request);
+    public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable Long id, @RequestBody CustomerRequest request) {
+        CustomerResponse updatedCustomer = customerService.update(id, request);
         return ResponseEntity.ok(updatedCustomer);
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getAll() {
-        List<Customer> customers = customerService.findAll();
+    public ResponseEntity<List<CustomerResponse>> getAll() {
+        List<CustomerResponse> customers = customerService.findAll();
         return ResponseEntity.ok(customers);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        Customer customer = customerService.findById(id);
+    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable Long id) {
+        CustomerResponse customer = customerService.findById(id);
         return ResponseEntity.ok(customer);
     }
 
