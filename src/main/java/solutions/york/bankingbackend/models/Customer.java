@@ -17,28 +17,35 @@ public class Customer {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
     private String phoneNumber;
 
     private Boolean archived;
 
     public Customer() {}
-    public Customer(String firstName, String lastName, String email, String phoneNumber) {
+    public Customer(String firstName, String lastName, String email, String password, String phoneNumber) {
         if (firstName == null || firstName.isBlank()) {throw new IllegalArgumentException("First name is required");}
         if (lastName == null || lastName.isBlank()) {throw new IllegalArgumentException("Last name is required");}
         if (email == null || email.isBlank()) {throw new IllegalArgumentException("Email is required");}
+        if (password == null || password.isBlank()) {throw new IllegalArgumentException("Password is required");}
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.archived = false;
     }
-    public void updateCustomerData(String firstName, String lastName, String email, String phoneNumber) {
+    public void updateCustomerData(String firstName, String lastName, String email, String password, String phoneNumber) {
         if (firstName == null || firstName.isBlank()) {throw new IllegalArgumentException("First name is required");}
         if (lastName == null || lastName.isBlank()) {throw new IllegalArgumentException("Last name is required");}
         if (email == null || email.isBlank()) {throw new IllegalArgumentException("Email is required");}
+        if (password == null || password.isBlank()) {throw new IllegalArgumentException("Password is required");}
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
     }
 
@@ -65,6 +72,12 @@ public class Customer {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
     public String getPhoneNumber() {
         return phoneNumber;
