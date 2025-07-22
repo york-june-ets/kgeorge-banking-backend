@@ -3,6 +3,7 @@ package solutions.york.bankingbackend.services;
 import org.springframework.stereotype.Service;
 import solutions.york.bankingbackend.dto.CustomerRequest;
 import solutions.york.bankingbackend.dto.CustomerResponse;
+import solutions.york.bankingbackend.dto.LoginRequest;
 import solutions.york.bankingbackend.models.Account;
 import solutions.york.bankingbackend.models.Customer;
 import solutions.york.bankingbackend.repositories.AccountRepository;
@@ -69,5 +70,15 @@ public class CustomerService {
     public List<Account> findAccounts(Long id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
         return accountService.findByCustomerId(customer.getId());
+    }
+
+    public CustomerResponse login(LoginRequest request) {
+        if (request == null) { throw new IllegalArgumentException("Request body is required");}
+        if (request.getEmail() == null || request.getEmail().isBlank()) {throw new IllegalArgumentException("Email is required");}
+        if (request.getPassword() == null || request.getPassword().isBlank()) {throw new IllegalArgumentException("Password is required");}
+        Customer customer = customerRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+        if (!customer.getPassword().equals(request.getPassword())) {throw new IllegalArgumentException("Invalid password");}
+        if (customer.isArchived()) {throw new IllegalArgumentException("Cannot login to archived customer");}
+        return new CustomerResponse(customer);
     }
 }
